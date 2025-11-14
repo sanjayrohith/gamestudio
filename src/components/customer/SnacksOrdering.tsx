@@ -2,8 +2,7 @@ import { useState, useEffect } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { SNACKS } from '@/lib/mockData';
-import { addOrder, getOrders } from '@/lib/mockData';
+import { SNACKS, addOrder } from '@/lib/mockData';
 import { getCurrentUser } from '@/lib/auth';
 import { toast } from 'sonner';
 import { ShoppingCart, Plus, Minus, IndianRupee, Trash2 } from 'lucide-react';
@@ -12,6 +11,8 @@ import { CartItem } from '@/lib/types';
 export const SnacksOrdering = () => {
   const [cart, setCart] = useState<CartItem[]>([]);
   const user = getCurrentUser();
+  const customerId = user?.id ?? 'guest';
+  const customerName = user?.name ?? 'Guest Player';
 
   useEffect(() => {
     const savedCart = localStorage.getItem('cart');
@@ -66,8 +67,8 @@ export const SnacksOrdering = () => {
 
     const order = {
       id: `ORD${Date.now()}`,
-      customerId: user?.id || '',
-      customerName: user?.name || '',
+  customerId,
+  customerName,
       items: cart.map((item) => {
         const snack = SNACKS.find((s) => s.id === item.snackId);
         return {

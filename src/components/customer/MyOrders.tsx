@@ -7,8 +7,9 @@ import { Package, IndianRupee, Clock } from 'lucide-react';
 export const MyOrders = () => {
   const orders = getOrders();
   const user = getCurrentUser();
+  const currentCustomerId = user?.id ?? 'guest';
 
-  const myOrders = orders.filter((o) => o.customerId === user?.id);
+  const myOrders = orders.filter((o) => o.customerId === currentCustomerId);
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -49,8 +50,8 @@ export const MyOrders = () => {
                     </div>
 
                     <div className="space-y-1">
-                      {order.items.map((item, index) => (
-                        <div key={index} className="flex items-center justify-between text-sm">
+                      {order.items.map((item) => (
+                        <div key={item.snackId} className="flex items-center justify-between text-sm">
                           <span className="text-muted-foreground">
                             {item.snackName} × {item.quantity}
                           </span>

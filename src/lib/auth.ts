@@ -16,13 +16,6 @@ const MOCK_USERS = [
     name: 'Admin User',
     role: 'admin' as UserRole,
   },
-  {
-    id: '2',
-    email: 'customer@gamestudio.com',
-    password: 'customer123',
-    name: 'Customer User',
-    role: 'customer' as UserRole,
-  },
 ];
 
 export const login = (email: string, password: string): User | null => {

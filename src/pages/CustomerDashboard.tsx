@@ -44,7 +44,7 @@ const CustomerDashboard = () => {
             <GameBooking />
           </TabsContent>
 
-          <TabsContent value="snacks">
+          <TabsContent value="snacks" id="snacks">
             <SnacksOrdering />
           </TabsContent>
 

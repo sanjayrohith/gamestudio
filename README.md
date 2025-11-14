@@ -48,6 +48,13 @@ The dev server prints a local URL (default http://localhost:5173) and reloads au
 └── vite.config.ts    # Vite + React-SWC configuration
 ```
 
+## Access model
+
+- `https://<host>/` → public landing page with CTAs into the customer dashboard.
+- `https://<host>/dashboard` + in-app booking/snacks flows are fully public; data is stored locally for the current browser session.
+- `https://<host>/admin/login` → the only authentication surface. Successful login unlocks `/admin`, `/admin/*`, and `/profile` via the `ProtectedRoute` guard.
+- A subtle “Admin Login” link also lives in the landing-page footer so guests never run into auth walls.
+
 ## Deployment
 
 1. Run `npm run build` to generate the production bundle.

@@ -21,10 +21,12 @@ export const GameBooking = () => {
   const [selectedTime, setSelectedTime] = useState('');
   const [duration, setDuration] = useState('1');
   const user = getCurrentUser();
+  const customerId = user?.id ?? 'guest';
+  const customerName = user?.name ?? 'Guest Player';
   const games = getGames();
 
   const game = games.find((g) => g.id === selectedGame);
-  const totalAmount = game ? game.price * parseInt(duration) : 0;
+  const totalAmount = game ? game.price * Number.parseInt(duration, 10) : 0;
 
   const handleBooking = () => {
     if (!selectedGame || !selectedDate || !selectedTime || !duration) {
@@ -34,13 +36,13 @@ export const GameBooking = () => {
 
     const booking = {
       id: `BK${Date.now()}`,
-      customerId: user?.id || '',
-      customerName: user?.name || '',
+  customerId,
+  customerName,
       gameId: selectedGame,
       gameName: game?.name || '',
       date: selectedDate.toISOString().split('T')[0],
       startTime: selectedTime,
-      duration: parseInt(duration),
+  duration: Number.parseInt(duration, 10),
       amount: totalAmount,
       status: 'upcoming' as const,
       createdAt: new Date().toISOString(),
@@ -75,7 +77,7 @@ export const GameBooking = () => {
                   selectedGame === game.id
                     ? 'border-primary bg-primary/10'
                     : 'border-border hover:border-primary/50'
-                } ${!game.available ? 'opacity-50 cursor-not-allowed' : ''}`}
+                } ${game.available ? '' : 'opacity-50 cursor-not-allowed'}`}
                 disabled={!game.available}
               >
                 <div className="flex items-start gap-3">
@@ -106,7 +108,7 @@ export const GameBooking = () => {
 
           <div className="space-y-4">
             <div className="space-y-2">
-              <label className="text-sm font-medium">Select Time Slot</label>
+              <p className="text-sm font-medium">Select Time Slot</p>
               <Select value={selectedTime} onValueChange={setSelectedTime}>
                 <SelectTrigger>
                   <SelectValue placeholder="Choose time slot" />
@@ -122,7 +124,7 @@ export const GameBooking = () => {
             </div>
 
             <div className="space-y-2">
-              <label className="text-sm font-medium">Duration (hours)</label>
+              <p className="text-sm font-medium">Duration (hours)</p>
               <Select value={duration} onValueChange={setDuration}>
                 <SelectTrigger>
                   <SelectValue />
@@ -148,7 +150,7 @@ export const GameBooking = () => {
                 </div>
               </div>
               <p className="text-xs text-muted-foreground">
-                {game.name} × {duration} hour{parseInt(duration) > 1 ? 's' : ''}
+                {game.name} × {duration} hour{Number.parseInt(duration, 10) > 1 ? 's' : ''}
               </p>
             </div>
           )}

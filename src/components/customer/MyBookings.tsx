@@ -21,8 +21,9 @@ export const MyBookings = () => {
   const [bookings, setBookings] = useState(getBookings());
   const [cancelBookingId, setCancelBookingId] = useState<string | null>(null);
   const user = getCurrentUser();
+  const currentCustomerId = user?.id ?? 'guest';
 
-  const myBookings = bookings.filter((b) => b.customerId === user?.id);
+  const myBookings = bookings.filter((b) => b.customerId === currentCustomerId);
 
   const handleCancelBooking = () => {
     if (cancelBookingId) {

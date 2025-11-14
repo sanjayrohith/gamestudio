@@ -106,8 +106,8 @@ export const SNACKS: Snack[] = [
 export const MOCK_BOOKINGS: Booking[] = [
   {
     id: 'BK001',
-    customerId: '2',
-    customerName: 'Customer User',
+    customerId: 'guest',
+    customerName: 'Guest Player',
     gameId: 'game1',
     gameName: 'God of War Ragnarök',
     date: new Date().toISOString().split('T')[0],
@@ -119,8 +119,8 @@ export const MOCK_BOOKINGS: Booking[] = [
   },
   {
     id: 'BK002',
-    customerId: '2',
-    customerName: 'Customer User',
+    customerId: 'guest',
+    customerName: 'Guest Player',
     gameId: 'game2',
     gameName: 'Spider-Man 2',
     date: '2025-11-10',
@@ -135,8 +135,8 @@ export const MOCK_BOOKINGS: Booking[] = [
 export const MOCK_ORDERS: Order[] = [
   {
     id: 'ORD001',
-    customerId: '2',
-    customerName: 'Customer User',
+    customerId: 'guest',
+    customerName: 'Guest Player',
     items: [
       {
         snackId: 'snack1',
