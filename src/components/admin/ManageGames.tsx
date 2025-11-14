@@ -21,6 +21,14 @@ export const ManageGames = () => {
     image: '',
     description: '',
   });
+  const tableHeaders = [
+    { label: 'Image' },
+    { label: 'Name' },
+    { label: 'Price/Hour' },
+    { label: 'Description' },
+    { label: 'Status' },
+    { label: 'Actions', className: 'text-right' },
+  ];
 
   const handleAddGame = () => {
     if (!formData.name || !formData.price) {
@@ -161,13 +169,15 @@ export const ManageGames = () => {
         <div className="rounded-md border overflow-x-auto">
           <Table>
             <TableHeader>
-              <TableRow>
-                <TableHead>Image</TableHead>
-                <TableHead>Name</TableHead>
-                <TableHead>Price/Hour</TableHead>
-                <TableHead>Description</TableHead>
-                <TableHead>Status</TableHead>
-                <TableHead className="text-right">Actions</TableHead>
+              <TableRow className="bg-muted/50">
+                {tableHeaders.map(({ label, className }) => (
+                  <TableHead
+                    key={label}
+                    className={`text-primary font-semibold tracking-wide ${className ?? ''}`.trim()}
+                  >
+                    {label}
+                  </TableHead>
+                ))}
               </TableRow>
             </TableHeader>
             <TableBody>

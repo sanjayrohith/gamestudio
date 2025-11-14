@@ -10,6 +10,15 @@ import { toast } from 'sonner';
 
 export const ManageOrders = () => {
   const [orders, setOrders] = useState(getOrders());
+  const tableHeaders = [
+    { label: 'Order ID' },
+    { label: 'Customer' },
+    { label: 'Items' },
+    { label: 'Amount' },
+    { label: 'Time' },
+    { label: 'Status' },
+    { label: 'Actions', className: 'text-right' },
+  ];
 
   const handleStatusChange = (orderId: string, newStatus: 'pending' | 'preparing' | 'delivered') => {
     updateOrder(orderId, { status: newStatus });
@@ -40,14 +49,15 @@ export const ManageOrders = () => {
         <div className="rounded-md border overflow-x-auto">
           <Table>
             <TableHeader>
-              <TableRow>
-                <TableHead>Order ID</TableHead>
-                <TableHead>Customer</TableHead>
-                <TableHead>Items</TableHead>
-                <TableHead>Amount</TableHead>
-                <TableHead>Time</TableHead>
-                <TableHead>Status</TableHead>
-                <TableHead className="text-right">Actions</TableHead>
+              <TableRow className="bg-muted/50">
+                {tableHeaders.map(({ label, className }) => (
+                  <TableHead
+                    key={label}
+                    className={`text-primary font-semibold tracking-wide ${className ?? ''}`.trim()}
+                  >
+                    {label}
+                  </TableHead>
+                ))}
               </TableRow>
             </TableHeader>
             <TableBody>

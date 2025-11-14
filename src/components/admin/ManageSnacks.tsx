@@ -9,6 +9,14 @@ import { toast } from 'sonner';
 
 export const ManageSnacks = () => {
   const [snacks] = useState(SNACKS);
+  const tableHeaders = [
+    { label: 'Image' },
+    { label: 'Name' },
+    { label: 'Price' },
+    { label: 'Stock' },
+    { label: 'Status' },
+    { label: 'Actions', className: 'text-right' },
+  ];
 
   const handleEdit = (snackId: string) => {
     toast.info('Edit functionality - Coming soon');
@@ -40,13 +48,15 @@ export const ManageSnacks = () => {
         <div className="rounded-md border overflow-x-auto">
           <Table>
             <TableHeader>
-              <TableRow>
-                <TableHead>Image</TableHead>
-                <TableHead>Name</TableHead>
-                <TableHead>Price</TableHead>
-                <TableHead>Stock</TableHead>
-                <TableHead>Status</TableHead>
-                <TableHead className="text-right">Actions</TableHead>
+              <TableRow className="bg-muted/50">
+                {tableHeaders.map(({ label, className }) => (
+                  <TableHead
+                    key={label}
+                    className={`text-primary font-semibold tracking-wide ${className ?? ''}`.trim()}
+                  >
+                    {label}
+                  </TableHead>
+                ))}
               </TableRow>
             </TableHeader>
             <TableBody>

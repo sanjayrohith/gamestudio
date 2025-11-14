@@ -6,6 +6,7 @@ import { IndianRupee, Users } from 'lucide-react';
 export const ManageCustomers = () => {
   const bookings = getBookings();
   const orders = getOrders();
+  const tableHeaders = ['Customer ID', 'Name', 'Email', 'Total Bookings', 'Total Spent'];
 
   // Aggregate customer data
   const customerData = bookings.reduce((acc, booking) => {
@@ -45,12 +46,12 @@ export const ManageCustomers = () => {
         <div className="rounded-md border overflow-x-auto">
           <Table>
             <TableHeader>
-              <TableRow>
-                <TableHead>Customer ID</TableHead>
-                <TableHead>Name</TableHead>
-                <TableHead>Email</TableHead>
-                <TableHead>Total Bookings</TableHead>
-                <TableHead>Total Spent</TableHead>
+              <TableRow className="bg-muted/50">
+                {tableHeaders.map((title) => (
+                  <TableHead key={title} className="text-primary font-semibold tracking-wide">
+                    {title}
+                  </TableHead>
+                ))}
               </TableRow>
             </TableHeader>
             <TableBody>
