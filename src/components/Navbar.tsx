@@ -1,6 +1,16 @@
 import { Link, useNavigate } from 'react-router-dom';
-import { Gamepad2, LogOut, User, Bell } from 'lucide-react';
+import {
+  Bell,
+  Gamepad2,
+  LayoutDashboard,
+  LifeBuoy,
+  LogOut,
+  Sparkles,
+  User as UserIcon,
+  Users,
+} from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -9,6 +19,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import { NavLink } from '@/components/NavLink';
 import { getCurrentUser, logout } from '@/lib/auth';
 import { toast } from 'sonner';
 
@@ -24,54 +35,116 @@ export const Navbar = () => {
 
   if (!user) return null;
 
+  const navItems =
+    user.role === 'admin'
+      ? [
+          { label: 'Admin Hub', href: '/admin', icon: LayoutDashboard },
+          { label: 'Community', href: '/profile', icon: Users },
+        ]
+      : [
+          { label: 'Player Hub', href: '/dashboard', icon: LayoutDashboard },
+          { label: 'Profile', href: '/profile', icon: UserIcon },
+        ];
+
+  const quickAction =
+    user.role === 'admin'
+      ? { label: 'New Slot', description: 'Open booking slots', route: '/admin' }
+      : { label: 'Book Station', description: 'Reserve a console', route: '/dashboard' };
+
   return (
-    <nav className="sticky top-0 z-50 w-full border-b border-border bg-card/95 backdrop-blur supports-[backdrop-filter]:bg-card/60">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex h-16 items-center justify-between">
-          <Link to="/" className="flex items-center space-x-2">
-            <div className="rounded-lg bg-primary p-2">
-              <Gamepad2 className="h-6 w-6 text-primary-foreground" />
+    <header className="pointer-events-none fixed inset-x-0 top-4 z-50 flex justify-center px-4 sm:px-6">
+      <div className="pointer-events-auto w-full max-w-6xl rounded-[28px] border border-white/10 bg-gradient-to-r from-slate-950/90 via-slate-900/80 to-slate-950/90 p-4 shadow-[0px_25px_70px_rgba(15,23,42,0.5)] backdrop-blur-2xl">
+        <div className="flex flex-col gap-4">
+          <div className="flex flex-wrap items-center gap-4">
+            <Link to={user.role === 'admin' ? '/admin' : '/dashboard'} className="flex items-center gap-3">
+              <div className="rounded-2xl bg-primary/90 p-2 text-primary-foreground shadow-lg shadow-primary/40">
+                <Gamepad2 className="h-6 w-6" />
+              </div>
+              <div>
+                <p className="text-base font-semibold text-white">GameStudio OS</p>
+                <p className="text-xs text-white/60">Immersive PlayStation lounge</p>
+              </div>
+            </Link>
+
+            <div className="hidden flex-1 items-center justify-center gap-2 md:flex">
+              {navItems.map((item) => (
+                <NavLink
+                  key={item.href}
+                  to={item.href}
+                  className="group flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium text-white/70 transition hover:text-white"
+                  activeClassName="bg-white/15 text-white shadow-inner"
+                >
+                  <item.icon className="h-4 w-4" />
+                  <span>{item.label}</span>
+                </NavLink>
+              ))}
             </div>
-            <span className="text-xl font-bold">GameStudio</span>
-          </Link>
 
-          <div className="flex items-center space-x-4">
-            <Button variant="ghost" size="icon" className="relative">
-              <Bell className="h-5 w-5" />
-              <span className="absolute -right-1 -top-1 flex h-4 w-4 items-center justify-center rounded-full bg-primary text-[10px] font-bold text-primary-foreground">
-                3
-              </span>
-            </Button>
+            <div className="flex items-center gap-2 sm:ml-auto">
+              <Badge variant="outline" className="hidden uppercase tracking-wide text-xs text-emerald-300 border-emerald-500/50 bg-emerald-500/10 sm:inline-flex">
+                {user.role}
+              </Badge>
+              <Button
+                size="sm"
+                onClick={() => navigate(quickAction.route)}
+                className="hidden gap-2 rounded-full bg-gradient-to-r from-primary to-primary/70 text-primary-foreground shadow-lg shadow-primary/40 transition hover:scale-[1.02] hover:shadow-primary/60 lg:inline-flex"
+              >
+                <Sparkles className="h-4 w-4" />
+                {quickAction.label}
+              </Button>
+              <Button variant="ghost" size="icon" className="relative rounded-full border border-white/10 bg-white/5 text-white">
+                <Bell className="h-5 w-5" />
+                <span className="absolute -right-0.5 -top-0.5 flex h-4 w-4 items-center justify-center rounded-full bg-rose-500 text-[10px] font-bold text-white">
+                  3
+                </span>
+              </Button>
 
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="icon" className="rounded-full">
-                  <User className="h-5 w-5" />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-56">
-                <DropdownMenuLabel>
-                  <div className="flex flex-col space-y-1">
-                    <p className="text-sm font-medium">{user.name}</p>
-                    <p className="text-xs text-muted-foreground">{user.email}</p>
-                    <p className="text-xs text-accent capitalize">{user.role}</p>
-                  </div>
-                </DropdownMenuLabel>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem onClick={() => navigate('/profile')}>
-                  <User className="mr-2 h-4 w-4" />
-                  Profile Settings
-                </DropdownMenuItem>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem onClick={handleLogout} className="text-destructive">
-                  <LogOut className="mr-2 h-4 w-4" />
-                  Logout
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="ghost" size="icon" className="rounded-full border border-white/10 bg-white/5 text-white">
+                    <UserIcon className="h-5 w-5" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="w-56">
+                  <DropdownMenuLabel>
+                    <div className="flex flex-col space-y-1">
+                      <p className="text-sm font-medium">{user.name}</p>
+                      <p className="text-xs text-muted-foreground">{user.email}</p>
+                      <p className="text-xs text-primary capitalize">{user.role}</p>
+                    </div>
+                  </DropdownMenuLabel>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem onClick={() => navigate('/profile')}>
+                    <UserIcon className="mr-2 h-4 w-4" />
+                    Profile Settings
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem onClick={handleLogout} className="text-destructive">
+                    <LogOut className="mr-2 h-4 w-4" />
+                    Logout
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </div>
+          </div>
+
+          <div className="flex flex-col gap-2 text-xs text-white/70 sm:flex-row sm:items-center sm:justify-between">
+            <div className="flex items-center gap-2">
+              <span className="inline-flex h-2 w-2 animate-pulse rounded-full bg-emerald-400" />
+              <span>Studios are live — next free slot in 12 mins</span>
+            </div>
+            <div className="flex flex-wrap items-center gap-3 text-white/60">
+              <div className="flex items-center gap-2">
+                <span className="rounded-full bg-white/5 px-2 py-1 text-[11px] uppercase tracking-wide">Open 10:00 - 23:00</span>
+              </div>
+              <div className="flex items-center gap-1">
+                <LifeBuoy className="h-3.5 w-3.5" />
+                <span>Need help? Say hi at support@gamestudio.gg</span>
+              </div>
+            </div>
           </div>
         </div>
       </div>
-    </nav>
+    </header>
   );
 };

@@ -11,10 +11,10 @@ import { ManageGames } from '@/components/admin/ManageGames';
 
 const AdminDashboard = () => {
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-gradient-to-b from-slate-950 via-slate-900/90 to-background pt-32">
       <Navbar />
       
-      <div className="container mx-auto px-4 py-8">
+      <div className="container mx-auto px-4 pb-12">
         <div className="mb-8">
           <h1 className="text-3xl font-bold mb-2">Admin Dashboard</h1>
           <p className="text-muted-foreground">Manage your game studio operations</p>
